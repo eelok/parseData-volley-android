@@ -28,16 +28,20 @@ public class MainActivity extends AppCompatActivity {
     String url = "https://www.google.com";
     String apiUrl = "https://jsonplaceholder.typicode.com/todos";
     String apiUrlTodo = "https://jsonplaceholder.typicode.com/todos/3";
+
     RequestQueue queue;
+
     private ActivityMainBinding viewBinding;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+//        setContentView(R.layout.activity_main);
         viewBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        queue = Volley.newRequestQueue(this);
+
+        ///MainActivity.this. or this or this.getApplicationContext()
+        queue = MySingleton.getInstance(this.getApplicationContext()).getRequestQueue();
 
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, apiUrlTodo, null, new Response.Listener<JSONObject>() {
@@ -78,12 +82,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         StringRequest stringRequest = getStringRequest();
 
+
         queue.add(jsonObjectRequest);
-//        queue.add(jsonArrayRequest);
-//        queue.add(stringRequest);
+        queue.add(jsonArrayRequest);
+        queue.add(stringRequest);
+
     }
 
     @NonNull
